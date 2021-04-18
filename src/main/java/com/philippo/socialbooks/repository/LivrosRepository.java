@@ -1,4 +1,4 @@
-package repository;
+package com.philippo.socialbooks.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
