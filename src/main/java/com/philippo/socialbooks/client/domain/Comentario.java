@@ -1,4 +1,4 @@
-package com.philippo.socialbooks;
+package com.philippo.socialbooks.client.domain;
 
 import java.util.Date;
 

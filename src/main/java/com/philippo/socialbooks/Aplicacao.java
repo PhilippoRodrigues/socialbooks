@@ -1,26 +1,33 @@
 package com.philippo.socialbooks;
 
-import java.net.URI;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
+import com.philippo.socialbooks.client.LivrosClient;
+import com.philippo.socialbooks.client.domain.Livro;
 
 public class Aplicacao {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ParseException {
 		
-		RestTemplate restTemplate = new RestTemplate();
+		LivrosClient client =  new LivrosClient();
 		
-		RequestEntity<Void> request = RequestEntity
-				.get(URI.create("http://localhost:8080/livros"))
-				.header("Authorization", "Basic cGhpbGlwcG86czNuaDQ=")
-				.build();
+		List<Livro> listaLivros = client.listar();
 		
-		ResponseEntity<Livro[]> response = restTemplate.exchange(request, Livro[].class);
-		
-		for (Livro livro : response.getBody()) {
+		for (Livro livro : listaLivros) {
 			System.out.println("Livro: " + livro.getNome());
 		}
+		
+		Livro livro = new Livro();
+		livro.setNome("Domain-Drive Design");
+		livro.setEditora("Exemplo");
+		SimpleDateFormat publicacao = new SimpleDateFormat("dd/MM/yyyy");
+		livro.setPublicacao(publicacao.parse("28/04/2021"));
+		livro.setResumo("Esse livro aborda métodos de design pattern.");
+		
+		String localizacao = client.salvar(livro);
+		
+		System.out.println("URI do livro saldo: " + localizacao);
 	}
 }
