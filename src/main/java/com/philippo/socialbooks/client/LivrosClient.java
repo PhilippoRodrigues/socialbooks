@@ -13,7 +13,7 @@ import com.philippo.socialbooks.client.domain.Livro;
 
 public class LivrosClient {
 	
-	private RestTemplate restTemplate;
+private RestTemplate restTemplate;
 	
 	private String URI_BASE;
 	
@@ -23,42 +23,44 @@ public class LivrosClient {
 	
 	public LivrosClient(String url, String usuario, String senha) {
 		restTemplate = new RestTemplate();
+		
 		URI_BASE = url.concat(URN_BASE);
+		
 		String credencialAux = usuario + ":" + senha;
-		credencial = "Basic " + Base64.getEncoder().encodeToString(credencialAux.getBytes());
-		}
+		
+		credencial = "Basic " + Base64.getEncoder()
+				.encodeToString(credencialAux.getBytes());
+	}
 	
 	public List<Livro> listar() {
-		
 		RequestEntity<Void> request = RequestEntity
 				.get(URI.create(URI_BASE))
-				.header("Authorization", credencial)
-				.build();
+				.header("Authorization", credencial).build();
 		
 		ResponseEntity<Livro[]> response = restTemplate.exchange(request, Livro[].class);
 		
 		return Arrays.asList(response.getBody());
 	}
 	
-	public String salvar(Livro livro) {
-		
-		RequestEntity<Livro> request = RequestEntity.post(URI.create(URI_BASE))
+	public String salvar(Livro livro) {		
+		RequestEntity<Livro> request = RequestEntity
+				.post(URI.create(URI_BASE))
 				.header("Authorization", credencial)
 				.body(livro);
 		
-		ResponseEntity<Void> response =restTemplate.exchange(request, Void.class);
+		ResponseEntity<Void> response = restTemplate.exchange(request, Void.class);
 		
-		return response.getHeaders().getLocation().toString(); 
+		return response.getHeaders().getLocation().toString();
 	}
 	
 	public Livro buscar(String uri) {
-		
-		RequestEntity<Void> request = RequestEntity.get(URI.create(uri))
+		RequestEntity<Void> request = RequestEntity
+				.get(URI.create(uri))
 				.header("Authorization", credencial)
 				.build();
 		
-		ResponseEntity<Livro> response =restTemplate.exchange(request, Livro.class);
+		ResponseEntity<Livro> response = restTemplate.exchange(request, Livro.class);
 		
-		return response.getBody(); 
+		return response.getBody();
 	}
 }
